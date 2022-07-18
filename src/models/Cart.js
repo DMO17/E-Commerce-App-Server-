@@ -1,9 +1,26 @@
 const { model, Schema } = require("mongoose");
 
-const cartSchema = {};
+const cartSchema = {
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
+  products: [
+    {
+      productId: {
+        type: Schema.Types.ObjectId,
+        ref: "product",
+      },
+      quantity: {
+        type: Number,
+        quantity: 1,
+      },
+    },
+  ],
+};
 
-const schema = new Schema(userSchema, { timestamps: true });
+const schema = new Schema(cartSchema, { timestamps: true });
 
-const Cart = model("user", schema);
+const Cart = model("cart", schema);
 
 module.exports = Cart;
