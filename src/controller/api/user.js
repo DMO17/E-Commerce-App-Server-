@@ -52,7 +52,9 @@ const login = async (req, res) => {
 
     const accessToken = signToken(user);
 
-    return res.json({ success: true, user, accessToken });
+    const { password: userPassword, ...userData } = user._doc;
+
+    return res.json({ success: true, user: userData, accessToken });
   } catch (error) {
     console.log(`[ERROR]: Failed to login | ${error.message}`);
     return res.status({ success: false, error: "Failed to login" });
