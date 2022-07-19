@@ -86,6 +86,45 @@ const createProduct = async (req, res) => {
   }
 };
 
+const updateProduct = async (req, res) => {
+  try {
+    if (!req.user.isAdmin) {
+      console.log(
+        `[ERROR]: Failed to create Product | Only an admin is authorized to create a product`
+      );
+      return res
+        .status(400)
+        .json({ success: false, error: "Failed to create Product" });
+    }
+
+    const { id } = req.params;
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      console.log(
+        `[ERROR]: Failed to get product | Product with id ${id} does'nt exist`
+      );
+      return res
+        .status(400)
+        .json({ success: false, error: "Failed to get product" });
+    }
+
+    const updatedProductData = { ...product._doc, ...req.body };
+
+    await Product.findByIdAndUpdate(
+      id,
+      { $set: updatedProductData },
+      { new: true }
+    );
+
+    return res.json({ success: true });
+  } catch (error) {
+    console.log(`[ERROR]: Failed to update product | ${error.message}`);
+    return res.json({ success: failed, error: "Failed to update product" });
+  }
+};
+
 const deleteProduct = async (req, res) => {
   try {
     if (!req.user.isAdmin) {
@@ -124,6 +163,7 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   getAllProducts,
   getProductById,
+  updateProduct,
   createProduct,
   deleteProduct,
 };
