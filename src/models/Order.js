@@ -14,8 +14,8 @@ const orderSchema = {
   status: { type: String, default: "pending" },
 };
 
-const schema = new Schema(userSchema, { timestamps: true });
+const schema = new Schema(orderSchema, { timestamps: true });
 
-const Order = model("user", schema);
+const Order = model("order", schema);
 
 module.exports = Order;

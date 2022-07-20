@@ -5,7 +5,7 @@ const productSchema = {
   description: { type: String, required: true },
   img: { type: String, required: true },
   category: { type: Array },
-  size: { type: String, required: true },
+  size: [{ type: String }],
   color: { type: String, required: true },
   price: { type: Number, required: true },
   inStock: { type: Boolean, default: true },

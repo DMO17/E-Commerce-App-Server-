@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { User } = require("../../models");
+const { User, Cart } = require("../../models");
 const { signToken } = require("../../util/auth");
 
 const signUp = async (req, res) => {
@@ -24,6 +24,8 @@ const signUp = async (req, res) => {
       email,
       password: hashedPassword,
     });
+
+    await Cart.create({ userId: user._id, products: [] });
 
     return res.json({ success: true, user });
   } catch (error) {
