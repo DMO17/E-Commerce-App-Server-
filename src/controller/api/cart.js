@@ -29,7 +29,7 @@ const getCart = async (req, res) => {
 const addProductToCart = async (req, res) => {
   try {
     const { id } = req.params;
-    const { size, productId } = req.body;
+    const { size, productId, cartProductId, quantity } = req.body;
 
     const cart = await Cart.findOne({ userId: id });
 
@@ -42,18 +42,33 @@ const addProductToCart = async (req, res) => {
         .json({ success: false, error: "Failed to get cart" });
     }
 
-    const updateCartData = { size, productId };
+    if (size && productId) {
+      const updateCartData = { size, productId };
 
-    await Cart.findOneAndUpdate(
-      { userId: id },
-      { $push: { products: updateCartData } },
-      { new: true }
-    );
+      await Cart.findOneAndUpdate(
+        { userId: id },
+        { $push: { products: updateCartData } },
+        { new: true }
+      );
 
-    return res.json({ success: true });
+      return res.json({ success: true });
+    }
+
+    if (cartProductId && quantity) {
+      await Cart.findOneAndUpdate(
+        { userId: id, "products._id": cartProductId },
+        { $set: { "products.$.quantity": quantity } },
+        {
+          new: true,
+          useFinedAndModify: false,
+        }
+      );
+
+      return res.json({ success: true });
+    }
   } catch (error) {
     console.log(`[ERROR]: Failed to update cart | ${error.message}`);
-    return res.json({ success: failed, error: "Failed to cart product" });
+    return res.json({ success: false, error: "Failed to cart product" });
   }
 };
 
