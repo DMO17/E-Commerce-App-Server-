@@ -14,6 +14,12 @@ const userSchema = {
   },
   password: { type: String, required: true, min: 6 },
   isAdmin: { type: Boolean, default: false },
+  orderId: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "order",
+    },
+  ],
 };
 
 const schema = new Schema(userSchema, { timestamps: true });

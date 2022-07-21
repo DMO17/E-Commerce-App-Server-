@@ -23,6 +23,7 @@ const signUp = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      orderId: [],
     });
 
     await Cart.create({ userId: user._id, products: [] });
