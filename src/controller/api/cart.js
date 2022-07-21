@@ -72,4 +72,38 @@ const addProductToCart = async (req, res) => {
   }
 };
 
-module.exports = { getCart, addProductToCart };
+const deleteProductFromCart = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { cartProductId } = req.body;
+
+    const cart = await Cart.findOne({ userId: id });
+
+    if (!cart) {
+      console.log(
+        `[ERROR]: Failed to delete product from cart | cart with id ${id} does'nt exist`
+      );
+      return res
+        .status(400)
+        .json({ success: false, error: "Failed to delete product from cart" });
+    }
+
+    await Cart.findOneAndUpdate(
+      { userId: id },
+      { $pull: { products: { _id: cartProductId } } },
+      { new: true }
+    );
+
+    return res.json({ success: true });
+  } catch (error) {
+    console.log(
+      `[ERROR]: Failed to delete product from cart | ${error.message}`
+    );
+    return res.json({
+      success: false,
+      error: "Failed to delete product from cart",
+    });
+  }
+};
+
+module.exports = { getCart, addProductToCart, deleteProductFromCart };
