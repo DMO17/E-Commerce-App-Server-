@@ -8,7 +8,7 @@ const router = Router();
 
 router.use("/user", user);
 
-router.use("/product", product);
+router.use("/products", product);
 
 router.use("/cart", cart);
 

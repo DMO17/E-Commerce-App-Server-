@@ -7,9 +7,7 @@ const getAllProducts = async (req, res) => {
     return res.json({ success: true, products });
   } catch (error) {
     console.log(`[ERROR]: Failed to get products | ${error.message}`);
-    return res
-      .status(500)
-      .json({ success: failed, error: "Failed to get products" });
+    return res.json({ success: false, error: "Failed to get products" });
   }
 };
 
@@ -23,15 +21,13 @@ const getProductById = async (req, res) => {
       console.log(
         `[ERROR]: Failed to get product | Product with id ${id} does'nt exist`
       );
-      return res
-        .status(400)
-        .json({ success: false, error: "Failed to get product" });
+      return res.json({ success: false, error: "Failed to get product" });
     }
 
     return res.json({ success: true, product });
   } catch (error) {
     console.log(`[ERROR]: Failed to get product | ${error.message}`);
-    return res.json({ success: failed, error: "Failed to get product" });
+    return res.json({ success: false, error: "Failed to get product" });
   }
 };
 
@@ -82,7 +78,7 @@ const createProduct = async (req, res) => {
     console.log(`[ERROR]: Failed to create product | ${error.message}`);
     return res
       .status(500)
-      .json({ success: failed, error: "Failed to create product" });
+      .json({ success: false, error: "Failed to create product" });
   }
 };
 
@@ -121,7 +117,7 @@ const updateProduct = async (req, res) => {
     return res.json({ success: true });
   } catch (error) {
     console.log(`[ERROR]: Failed to update product | ${error.message}`);
-    return res.json({ success: failed, error: "Failed to update product" });
+    return res.json({ success: false, error: "Failed to update product" });
   }
 };
 

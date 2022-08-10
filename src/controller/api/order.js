@@ -1,11 +1,13 @@
 const stripe = require("stripe")(process.env.STRIPE_KEY);
-const { Order } = require("../../models");
+const { Order, Cart } = require("../../models");
 
 const orderProducts = async (req, res) => {
   try {
-    const { userId, cartId, amount, address } = req.body;
+    const { userId, amount, address } = req.body;
 
-    if (!userId && !cartId && !amount && !address) {
+    const cart = await Cart.findOne({ userId });
+
+    if (!userId && !amount && !address) {
       console.log(
         `[ERROR]: Failed to place order  | All the fields are required`
       );
@@ -16,10 +18,16 @@ const orderProducts = async (req, res) => {
 
     await Order.create({
       userId,
-      cartId,
       amount,
       address,
+      products: cart.products,
     });
+
+    await Cart.findOneAndUpdate(
+      userId,
+      { $set: { products: [] } },
+      { new: true }
+    );
 
     return res.json({ success: true });
   } catch (error) {
@@ -38,9 +46,7 @@ const stripePayment = async (req, res) => {
       console.log(
         `[ERROR]: Failed to stripe payment  | All the fields are required`
       );
-      return res
-        .status(400)
-        .json({ success: false, error: "Failed to stripe payment" });
+      return res.json({ success: false, error: "Failed to stripe payment" });
     }
 
     const payment = await stripe.charges.create({
@@ -49,19 +55,17 @@ const stripePayment = async (req, res) => {
       currency: "gbp",
     });
 
+    console.log(payment);
+
     if (!payment) {
       console.log(`[ERROR]: Failed stripe payment | Incorrect details`);
-      return res
-        .status(500)
-        .json({ success: failed, error: "Failed stripe payment" });
+      return res.json({ success: failed, error: "Failed stripe payment" });
     }
 
     return res.json({ success: true, payment });
   } catch (error) {
     console.log(`[ERROR]: Failed stripe payment | ${error.message}`);
-    return res
-      .status(500)
-      .json({ success: false, error: "Failed stripe payment" });
+    return res.json({ success: false, error: "Failed stripe payment" });
   }
 };
 

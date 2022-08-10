@@ -5,10 +5,22 @@ const orderSchema = {
     type: Schema.Types.ObjectId,
     ref: "user",
   },
-  cartId: {
-    type: Schema.Types.ObjectId,
-    ref: "cart",
-  },
+  products: [
+    {
+      productId: {
+        type: Schema.Types.ObjectId,
+        ref: "product",
+      },
+      size: {
+        type: String,
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        default: 1,
+      },
+    },
+  ],
   amount: { type: Number, required: true },
   address: { type: Object, required: true },
   status: { type: String, default: "pending" },

@@ -5,6 +5,13 @@ const getCart = async (req, res) => {
     const { id } = req.params;
     const cart = await Cart.findOne({ userId: id });
 
+    if (!cart) {
+      console.log(
+        `[ERROR]: Failed to get cart | cart with id ${id} does'nt exist`
+      );
+      return res.json({ success: false, error: "Failed to get cart" });
+    }
+
     await cart.populate([
       {
         path: "userId",
@@ -42,8 +49,8 @@ const addProductToCart = async (req, res) => {
         .json({ success: false, error: "Failed to get cart" });
     }
 
-    if (size && productId) {
-      const updateCartData = { size, productId };
+    if (size && productId && quantity) {
+      const updateCartData = { size, productId, quantity };
 
       await Cart.findOneAndUpdate(
         { userId: id },

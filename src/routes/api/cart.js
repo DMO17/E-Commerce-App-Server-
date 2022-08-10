@@ -13,6 +13,6 @@ router.get("/:id", authMiddleware, getCart);
 
 router.put("/:id", authMiddleware, addProductToCart);
 
-router.delete("/:id", authMiddleware, deleteProductFromCart);
+router.put("/delete/:id", authMiddleware, deleteProductFromCart);
 
 module.exports = router;

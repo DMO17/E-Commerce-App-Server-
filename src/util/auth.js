@@ -23,6 +23,7 @@ const authMiddleware = (req, res, next) => {
     req.user = data;
   } catch (error) {
     console.log(`[ERROR]: Invalid Token | ${error.message}`);
+    return res.status(500).json({ success: false });
   }
 
   next();
