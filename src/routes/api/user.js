@@ -3,7 +3,7 @@ const { signUp, login } = require("../../controller/api/user");
 
 const router = Router();
 
-router.post("/sign-up", signUp);
+router.post("/register", signUp);
 
 router.post("/login", login);
 
