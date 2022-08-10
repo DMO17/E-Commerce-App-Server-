@@ -2,9 +2,9 @@ const { model, Schema } = require("mongoose");
 
 const schema = new Schema(
   {
+    username: { type: String, required: true, unique: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
     email: {
       type: String,
       required: true,
@@ -26,6 +26,6 @@ const schema = new Schema(
   { timestamps: true }
 );
 
-const User = model("user", schema);
+const Account = model("accounts", schema);
 
-module.exports = User;
+module.exports = Account;

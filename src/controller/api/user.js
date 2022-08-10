@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { User, Cart } = require("../../models");
+const { Account, Cart } = require("../../models");
 const { signToken } = require("../../util/auth");
 
 const signUp = async (req, res) => {
@@ -7,9 +7,8 @@ const signUp = async (req, res) => {
     const { firstName, lastName, username, email, password } = req.body;
 
     if (!firstName && !lastName && !username && !email && !password) {
-      console.log(`[ERROR]: Failed to sign up | All the fields are required`);
-      return res
-        .status(400)
+      console
+        .log(`[ERROR]: Failed to sign up | All the fields are required`)
         .json({ success: false, error: "Failed to sign up" });
     }
 
@@ -18,7 +17,7 @@ const signUp = async (req, res) => {
       await bcrypt.genSalt(10)
     );
 
-    const user = await User.create({
+    const user = await Account.create({
       firstName,
       lastName,
       username,
@@ -40,7 +39,7 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await Account.findOne({ email });
 
     if (!user) {
       console.log(`[ERROR]: Failed to Login | Account does'nt exist`);

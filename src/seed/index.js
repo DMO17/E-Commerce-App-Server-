@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 const seed = async () => {
   try {
-    const mongoDbUrl = process.env.MONGODB_URI;
+    const mongoDbUrl = process.env.MONGODB_URL;
 
     await mongoose.connect(mongoDbUrl, {
       useNewUrlParser: true,
