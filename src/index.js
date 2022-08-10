@@ -17,7 +17,7 @@ const init = async () => {
   try {
     app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
 
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(process.env.MONGODB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
