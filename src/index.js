@@ -17,10 +17,13 @@ const init = async () => {
   try {
     app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
 
-    await mongoose.connect(process.env.MONGODB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(
+      "mongodb+srv://dmoha0123:somaliland123@cluster0.kcta0ex.mongodb.net/?retryWrites=true&w=majority",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
 
     console.log("[INFO] : Successfully connected to db");
   } catch (error) {
