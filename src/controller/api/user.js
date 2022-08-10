@@ -4,9 +4,9 @@ const { signToken } = require("../../util/auth");
 
 const signUp = async (req, res) => {
   try {
-    const { fullName, username, email, password } = req.body;
+    const { firstName, lastName, username, email, password } = req.body;
 
-    if (!fullName && !username && !email && !password) {
+    if (!firstName && !lastName && !username && !email && !password) {
       console.log(`[ERROR]: Failed to sign up | All the fields are required`);
       return res
         .status(400)
@@ -19,7 +19,8 @@ const signUp = async (req, res) => {
     );
 
     const user = await User.create({
-      fullName,
+      firstName,
+      lastName,
       username,
       email,
       password: hashedPassword,
@@ -28,10 +29,10 @@ const signUp = async (req, res) => {
 
     await Cart.create({ userId: user._id, products: [] });
 
-    return res.json({ success: true, user });
+    return res.json({ success: true });
   } catch (error) {
     console.log(`[ERROR]: Failed to sign up | ${error.message}`);
-    return res.status({ success: failed, error: "Failed to sign up" });
+    return res.json({ success: false, error: "Failed to sign up" });
   }
 };
 
@@ -43,7 +44,7 @@ const login = async (req, res) => {
 
     if (!user) {
       console.log(`[ERROR]: Failed to Login | Account does'nt exist`);
-      return res.status(400).json({ success: false, error: "Failed to login" });
+      return res.json({ success: false, error: "Failed to login" });
     }
 
     const validatePassword = await bcrypt.compare(password, user.password);
@@ -60,7 +61,7 @@ const login = async (req, res) => {
     return res.json({ success: true, user: userData, accessToken });
   } catch (error) {
     console.log(`[ERROR]: Failed to login | ${error.message}`);
-    return res.status({ success: false, error: "Failed to login" });
+    return res.json({ success: false, error: "Failed to login" });
   }
 };
 

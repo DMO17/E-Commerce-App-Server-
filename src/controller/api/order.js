@@ -26,11 +26,11 @@ const orderProducts = async (req, res) => {
     console.log(`[ERROR]: Failed to place order | ${error.message}`);
     return res
       .status(500)
-      .json({ success: failed, error: "Failed to create product" });
+      .json({ success: false, error: "Failed to create product" });
   }
 };
 
-const stripePayment = (req, res) => {
+const stripePayment = async (req, res) => {
   try {
     const { tokenId, amount } = req.body;
 
@@ -43,18 +43,25 @@ const stripePayment = (req, res) => {
         .json({ success: false, error: "Failed to stripe payment" });
     }
 
-    const payment = stripe.charges.create({
+    const payment = await stripe.charges.create({
       source: tokenId,
       amount,
       currency: "gbp",
     });
 
-    res.json({ success: true, payment });
+    if (!payment) {
+      console.log(`[ERROR]: Failed stripe payment | Incorrect details`);
+      return res
+        .status(500)
+        .json({ success: failed, error: "Failed stripe payment" });
+    }
+
+    return res.json({ success: true, payment });
   } catch (error) {
     console.log(`[ERROR]: Failed stripe payment | ${error.message}`);
     return res
       .status(500)
-      .json({ success: failed, error: "Failed stripe payment" });
+      .json({ success: false, error: "Failed stripe payment" });
   }
 };
 
